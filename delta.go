@@ -41,9 +41,11 @@ func removeHolidays(start, end time.Time) float64 {
 	for year := yearStart; year <= yearEnd; year++ {
 		holidays := []time.Time{
 			time.Date(year, 1, 1, 0, 0, 0, 0, time.Local),
+			time.Date(year, 5, 1, 0, 0, 0, 0, time.Local),
 			time.Date(year, 5, 8, 0, 0, 0, 0, time.Local),
 			time.Date(year, 7, 14, 0, 0, 0, 0, time.Local),
 			time.Date(year, 8, 15, 0, 0, 0, 0, time.Local),
+			time.Date(year, 11, 1, 0, 0, 0, 0, time.Local),
 			time.Date(year, 11, 11, 0, 0, 0, 0, time.Local),
 			time.Date(year, 12, 25, 0, 0, 0, 0, time.Local),
 		}
