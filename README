@@ -1,0 +1,2 @@
+Simple lib to count working hours between two dates, also giving
+the number of days between A and B including weekends.
