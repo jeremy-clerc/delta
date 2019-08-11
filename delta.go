@@ -35,6 +35,30 @@ func adjustHour(t time.Time) time.Time {
 	return t
 }
 
+func removeHolidays(start, end time.Time) float64 {
+	var adjust float64
+	yearStart, yearEnd := start.Year(), end.Year()
+	for year := yearStart; year <= yearEnd; year++ {
+		holidays := []time.Time{
+			time.Date(year, 1, 1, 0, 0, 0, 0, time.Local),
+			time.Date(year, 5, 8, 0, 0, 0, 0, time.Local),
+			time.Date(year, 7, 14, 0, 0, 0, 0, time.Local),
+			time.Date(year, 8, 15, 0, 0, 0, 0, time.Local),
+			time.Date(year, 11, 11, 0, 0, 0, 0, time.Local),
+			time.Date(year, 12, 25, 0, 0, 0, 0, time.Local),
+		}
+		for _, holiday := range holidays {
+			if wd := holiday.Weekday(); wd == time.Saturday || wd == time.Sunday {
+				continue
+			}
+			if start.Before(holiday) && end.After(holiday) {
+				adjust += 8
+			}
+		}
+	}
+	return adjust
+}
+
 func Delta(start, end time.Time) (float64, int, int) {
 	// Adjust start to be Monday if in the weekend
 	start = start.In(time.Local)
@@ -50,5 +74,5 @@ func Delta(start, end time.Time) (float64, int, int) {
 	if days > 0 && end.Weekday() < start.Weekday() {
 		weekends += 1
 	}
-	return end.Sub(start).Hours() - 16*(days+weekends), int(days), int(weekends)
+	return end.Sub(start).Hours() - 16*(days+weekends) - removeHolidays(start, end), int(days), int(weekends)
 }
